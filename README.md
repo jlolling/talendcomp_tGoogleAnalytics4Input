@@ -9,3 +9,5 @@ Differences to the former component (tGoogleAnalyticsInput):
 * Instead of a profile or view-ID you need now the new GA4 property-ID
 * The API currently does not provide the information about sampling
 * Segments works completely different and cannot currently addressed in the reports (perhaps because of the beta state) 
+
+Here the documentation: https://github.com/jlolling/talendcomp_tGoogleAnalytics4Input/blob/master/doc/tGoogleAnalytics4Input.pdf
