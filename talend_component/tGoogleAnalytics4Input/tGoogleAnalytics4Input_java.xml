@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <COMPONENT> 
-  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="1.1" STATUS="PROD" COMPATIBILITY="ALL" AUTHOR="cimt AG" RELEASE_DATE="20230329" STARTABLE="true" HAS_CONDITIONAL_OUTPUTS="true"> 
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="1.2" STATUS="PROD" COMPATIBILITY="ALL" AUTHOR="cimt AG" RELEASE_DATE="20230502" STARTABLE="true" HAS_CONDITIONAL_OUTPUTS="true"> 
     <SIGNATURE/> 
   </HEADER>  
   <FAMILIES> 
@@ -88,13 +88,13 @@
     <PARAMETER FIELD="CHECK" NAME="KEEP_CLIENT" NUM_ROW="40"> 
       <DEFAULT>true</DEFAULT> 
     </PARAMETER>  
-    <PARAMETER NAME="RELEASE_LABEL_20230329" FIELD="LABEL" COLOR="0;0;0" NUM_ROW="900">
-      <DEFAULT>Release: 1.1 build at: 20230329</DEFAULT>
+    <PARAMETER NAME="RELEASE_LABEL_20230502" FIELD="LABEL" COLOR="0;0;0" NUM_ROW="900">
+      <DEFAULT>Release: 1.2 build at: 20230502</DEFAULT>
     </PARAMETER>
   </ADVANCED_PARAMETERS>  
   <CODEGENERATION> 
     <IMPORTS> 
-      <IMPORT NAME="jlo-talendcomp-google-analytics4" MODULE="jlo-talendcomp-google-analytics4-1.1.jar" MVN="mvn:de.jlo.talendcomp.google/jlo-talendcomp-google-analytics4/1.1" REQUIRED="true"/>
+      <IMPORT NAME="jlo-talendcomp-google-analytics4" MODULE="jlo-talendcomp-google-analytics4-1.2.jar" MVN="mvn:de.jlo.talendcomp.google/jlo-talendcomp-google-analytics4/1.2" REQUIRED="true"/>
       <IMPORT NAME="google-analytics-data" MODULE="google-analytics-data-0.24.0.jar" MVN="mvn:com.google.analytics/google-analytics-data/0.24.0" REQUIRED="true"/>
       <IMPORT NAME="grpc-api" MODULE="grpc-api-1.53.0.jar" MVN="mvn:io.grpc/grpc-api/1.53.0" REQUIRED="true"/>
       <IMPORT NAME="grpc-context" MODULE="grpc-context-1.53.0.jar" MVN="mvn:io.grpc/grpc-context/1.53.0" REQUIRED="true"/>
