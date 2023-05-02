@@ -226,6 +226,7 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 		reportRequestBuilder.addDateRanges(DateRange.newBuilder()
 				.setStartDate(startDate)
 				.setEndDate(endDate));
+		currentDate = sdf.parse(endDate);
 	}
 	
 	public void executeQuery() throws Exception {
@@ -408,7 +409,6 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 	
 	private List<DimensionValue> buildDimensionValues(List<String> oneRow) {
 		int index = 0;
-		currentDate = null;
 		final List<DimensionValue> oneRowDimensionValues = new ArrayList<DimensionValue>();
 		for (; index < listDimensions.size(); index++) {
 			String dimName = listDimensions.get(index).getName();
@@ -420,6 +420,8 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
         		try {
         			if (dm.value != null) {
     					currentDate = dateFormatter.parse(dm.value);
+        			} else {
+        				currentDate = null;
         			}
 				} catch (ParseException e) {
 					currentDate = null;

@@ -146,9 +146,7 @@
 			if (<%=cid%>.nextNormalizedRecord() == false) {
 				break;
 			}
-<% if (denormalizeDate) { %>
-	      globalMap.put("<%=cid%>_CURRENT_DATE", <%=cid%>.getCurrentDate());
-<% } %>
+	        globalMap.put("<%=cid%>_CURRENT_DATE", <%=cid%>.getCurrentDate());
 		} catch (Exception e) {
           globalMap.put("<%=cid%>_ERROR_MESSAGE", e.getMessage());
           globalMap.put("<%=cid%>_ERROR_CODE", <%=cid%>.getErrorCode());
