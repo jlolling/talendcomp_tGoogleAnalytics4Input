@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.google.analytics.data.v1beta.DateRange;
 import com.google.analytics.data.v1beta.Dimension;
@@ -650,5 +651,5 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 	public int getFetchSize() {
 		return fetchSize;
 	}
-	
+
 }

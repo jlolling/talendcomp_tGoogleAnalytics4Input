@@ -40,4 +40,5 @@
 	globalMap.put("<%=cid%>_NB_LINE", countLines_<%=cid%>);
 <% } %>    
 	globalMap.put("<%=cid%>_TOTAL_AFFECTED_ROWS", <%=cid%>_totalAffectedRows);
+	<%=cid%>.close();
 	
