@@ -23,7 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.analytics.data.v1beta.DateRange;
 import com.google.analytics.data.v1beta.Dimension;
@@ -44,6 +46,7 @@ import de.jlo.talendcomp.google.analytics.ga4.Util;
 
 public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 
+	private static Logger log = LogManager.getLogger(GoogleAnalyticsInput.class); 
 	private static final Map<String, GoogleAnalyticsInput> clientCache = new HashMap<String, GoogleAnalyticsInput>();
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private String startDate = null;
@@ -539,19 +542,43 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 		}
 	}
 	
-
 	private void setupDimensionFilters() throws Exception {
 		reportRequestBuilder.clearDimensionFilter();
-		if (dimensionFilters != null) {
-			String[] filters = dimensionFilters.split(",");
-			if (filters.length > 1) {
-				for (String f : filters) {
-					reportRequestBuilder.setDimensionFilter(FilterExpression.newBuilder()
-							.setAndGroup(FilterExpressionList.newBuilder()
-									.addExpressions(FilterExpressionBuilder.buildStringFilterExpression(f))));
+		if (dimensionFilters != null && dimensionFilters.trim().isEmpty() == false) {
+			if (dimensionFilters.contains(";")) {
+				String[] filters = dimensionFilters.split(";");
+				if (filters.length > 1) {
+					FilterExpressionList.Builder flb = FilterExpressionList.newBuilder();
+					for (String f : filters) {
+						if (f.contains(",")) {
+							throw new Exception("DimensionFilter cannot have AND(;) and OR(,) operators together. Invalid filter term: " + f);
+						}
+						flb.addExpressions(FilterExpressionBuilder.buildStringFilterExpression(f));
+					}
+					reportRequestBuilder.setDimensionFilter(FilterExpression
+							.newBuilder()
+							.setAndGroup(flb.build()));
+				} else if (filters.length == 1) {
+					reportRequestBuilder.setDimensionFilter(FilterExpressionBuilder.buildStringFilterExpression(filters[0]));
 				}
-			} else if (filters.length == 1) {
-				reportRequestBuilder.setDimensionFilter(FilterExpressionBuilder.buildStringFilterExpression(filters[0]));
+			} else if (dimensionFilters.contains(",")) {
+				String[] filters = dimensionFilters.split(",");
+				if (filters.length > 1) {
+					FilterExpressionList.Builder flb = FilterExpressionList.newBuilder();
+					for (String f : filters) {
+						if (f.contains(";")) {
+							throw new Exception("DimensionFilter cannot have OR(,) and AND(;) operators together. Invalid filter term: " + f);
+						}
+						flb.addExpressions(FilterExpressionBuilder.buildStringFilterExpression(f));
+					}
+					reportRequestBuilder.setDimensionFilter(FilterExpression
+							.newBuilder()
+							.setOrGroup(flb.build()));
+				} else if (filters.length == 1) {
+					reportRequestBuilder.setDimensionFilter(FilterExpressionBuilder.buildStringFilterExpression(filters[0]));
+				}
+			} else {
+				reportRequestBuilder.setDimensionFilter(FilterExpressionBuilder.buildStringFilterExpression(dimensionFilters));
 			}
 		}
 	}
@@ -559,16 +586,41 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 
 	private void setupMetricsFilters() throws Exception {
 		reportRequestBuilder.clearMetricFilter();
-		if (metricFilters != null) {
-			String[] filters = metricFilters.split(",");
-			if (filters.length > 1) {
-				for (String f : filters) {
-					reportRequestBuilder.setMetricFilter(FilterExpression.newBuilder()
-							.setAndGroup(FilterExpressionList.newBuilder()
-									.addExpressions(FilterExpressionBuilder.buildNumericFilterExpression(f))));
+		if (metricFilters != null && metricFilters.trim().isEmpty() == false) {
+			if (metricFilters.contains(";")) {
+				String[] filters = metricFilters.split(";");
+				if (filters.length > 1) {
+					FilterExpressionList.Builder flb = FilterExpressionList.newBuilder();
+					for (String f : filters) {
+						if (f.contains(",")) {
+							throw new Exception("MetricFilter cannot have AND(;) and OR(,) operators together. Invalid filter term: " + f);
+						}
+						flb.addExpressions(FilterExpressionBuilder.buildNumericFilterExpression(f));
+					}
+					reportRequestBuilder.setMetricFilter(FilterExpression
+							.newBuilder()
+							.setAndGroup(flb.build()));
+				} else if (filters.length == 1) {
+					reportRequestBuilder.setMetricFilter(FilterExpressionBuilder.buildNumericFilterExpression(filters[0]));
 				}
-			} else if (filters.length == 1) {
-				reportRequestBuilder.setMetricFilter(FilterExpressionBuilder.buildNumericFilterExpression(filters[0]));
+			} else if (metricFilters.contains(",")) {
+				String[] filters = metricFilters.split(",");
+				if (filters.length > 1) {
+					FilterExpressionList.Builder flb = FilterExpressionList.newBuilder();
+					for (String f : filters) {
+						if (f.contains(";")) {
+							throw new Exception("MetricFilter cannot have OR(,) and AND(;) operators together. Invalid filter term: " + f);
+						}
+						flb.addExpressions(FilterExpressionBuilder.buildNumericFilterExpression(f));
+					}
+					reportRequestBuilder.setMetricFilter(FilterExpression
+							.newBuilder()
+							.setOrGroup(flb.build()));
+				} else if (filters.length == 1) {
+					reportRequestBuilder.setMetricFilter(FilterExpressionBuilder.buildNumericFilterExpression(filters[0]));
+				}
+			} else {
+				reportRequestBuilder.setMetricFilter(FilterExpressionBuilder.buildNumericFilterExpression(metricFilters));
 			}
 		}
 	}
