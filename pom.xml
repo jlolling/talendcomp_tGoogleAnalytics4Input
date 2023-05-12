@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.jlo.talendcomp.google</groupId>
 	<artifactId>jlo-talendcomp-google-analytics4</artifactId>
-	<version>1.1</version>
+	<version>2.0</version>
 	<name>GoogleAnalytics Talend Component for GA4</name>
 		<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,12 +25,12 @@
 		<dependency>
 			<groupId>com.google.analytics</groupId>
 			<artifactId>google-analytics-data</artifactId>
-			<version>0.24.0</version>
+			<version>0.27.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.auth</groupId>
 			<artifactId>google-auth-library-oauth2-http</artifactId>
-			<version>1.16.0</version>
+			<version>1.16.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -66,8 +66,6 @@
 				<artifactId>cimt-talendcomp-maven-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<copyFromSourceBaseDir>${project.basedir}/talend_component</copyFromSourceBaseDir>
-					<componentBaseDir>${project.basedir}/talend_component</componentBaseDir>
 					<studioUserComponentFolder>${custom_component_folder}</studioUserComponentFolder>
 					<useTalendLibrariesMavenLocation>false</useTalendLibrariesMavenLocation>
 				</configuration>

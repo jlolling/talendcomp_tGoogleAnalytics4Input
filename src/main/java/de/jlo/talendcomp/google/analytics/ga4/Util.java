@@ -72,7 +72,7 @@ public class Util {
 	}
 	
 	public static Object convertToDatatype(String value, String dataType, String options) throws Exception {
-		if (value != null && value.trim().isEmpty() == false) {
+		if (value != null && value.trim().isEmpty() == false && value.contains("(not set)") == false) {
 			if ("String".equalsIgnoreCase(dataType)) {
 				return value;
 			} else if ("BigDecimal".equalsIgnoreCase(dataType)) {
