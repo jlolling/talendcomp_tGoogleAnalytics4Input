@@ -38,11 +38,13 @@ import com.google.analytics.data.v1beta.RunReportRequest;
 import com.google.analytics.data.v1beta.RunReportResponse;
 import com.google.analytics.data.v1beta.Row;
 import com.google.api.gax.rpc.ApiException;
+import com.google.api.gax.rpc.DeadlineExceededException;
 
 import de.jlo.talendcomp.google.analytics.ga4.DimensionValue;
 import de.jlo.talendcomp.google.analytics.ga4.GoogleAnalyticsBase;
 import de.jlo.talendcomp.google.analytics.ga4.MetricValue;
 import de.jlo.talendcomp.google.analytics.ga4.Util;
+import io.grpc.StatusRuntimeException;
 
 public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 
@@ -261,8 +263,13 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 				warn("Got error:" + apie.getMessage());
 				errorMessage = apie.getMessage();
 				errorCode = apie.getStatusCode().getCode().getHttpStatusCode();
-				if (apie.isRetryable() == false) {
-					throw new Exception("Request is not retryable and failed: " + apie.getMessage(), apie);
+				if (apie instanceof DeadlineExceededException) {
+					// found DEADLINE_EXCEEDED. Google tells us this is not retry-able but this is not the case!
+					waitTime = 5000; // we wait a bit longer and retry and usually it works
+				} else {
+					if (apie.isRetryable() == false) {
+						throw new Exception("Request is not retryable and failed: " + apie.getMessage(), apie);
+					}
 				}
 				if (currentAttempt == (maxRetriesInCaseOfErrors - 1)) {
 					error("All retries (#" + (currentAttempt+1) + " of " + maxRetriesInCaseOfErrors + ") request failed:" + apie.getMessage(), apie);
