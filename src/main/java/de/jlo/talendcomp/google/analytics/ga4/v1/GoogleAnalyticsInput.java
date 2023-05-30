@@ -540,7 +540,7 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 			String[] dimArray = dimensions.split(",");
 			int index = 0;
 			for (String dimName : dimArray) {
-				Dimension dimension = Dimension.newBuilder().setName(dimName).build();
+				Dimension dimension = buildDimension(dimName);
 				listDimensions.add(dimension);
 				reportRequestBuilder.addDimensions(dimension);
 				debug("add dimension: " + dimension.toString() + " at " + index);
@@ -631,6 +631,14 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 			}
 		}
 	}
+	
+	private Dimension buildDimension(String dimStr) {
+		if (dimStr != null && dimStr.trim().isEmpty() == false) {
+			return Dimension.newBuilder().setName(dimStr.trim()).build();
+		} else {
+			return null;
+		}
+	}
 
 	private Metric buildMetric(String metricStr) {
 		if (metricStr != null && metricStr.trim().isEmpty() == false) {
@@ -669,7 +677,7 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 		// a metric can consists of an alias and the expression separated by =
 		int index = 0;
 		for (String metricStr : metricArray) {
-			Metric metric = buildMetric(metricStr);
+			Metric metric = buildMetric(metricStr.trim());
 			if (metric != null) {
 				listMetrics.add(metric);
 				reportRequestBuilder.addMetrics(metric);
