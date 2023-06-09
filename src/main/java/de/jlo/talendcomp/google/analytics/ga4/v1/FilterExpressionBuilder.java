@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.analytics.data.v1beta.Filter;
 import com.google.analytics.data.v1beta.FilterExpression;
-import com.google.analytics.data.v1beta.FilterExpressionList;
 import com.google.analytics.data.v1beta.NumericValue;
 import com.google.analytics.data.v1beta.Filter.NumericFilter;
 import com.google.analytics.data.v1beta.Filter.StringFilter;
@@ -25,140 +24,7 @@ public class FilterExpressionBuilder {
 	private static final String STRING_FILTER_OP_REGEX_INCL   = "=~";
 	private static final String STRING_FILTER_OP_REGEX_EXCL   = "!~";
 	private static final String STRING_FILTER_OP_CONTAINS     = "=@";
-	private static final String STRING_FILTER_OP_CONTAINS_NOT = "!@";
-		
-	/**
-	 * Setup filter expressions in th UA style
-	 * Examples:
-	 * dim1==value1,dim2==value2,dim3!=value3
-	 * dim1==value1;dim2==value2;dim3!=value3
-	 * 
-	 * comma means OR
-	 * semicolon means AND
-	 * 
-	 * @param completeFilter
-	 * @param isNumericFilter if true, otherwise it is a String filter
-	 * @return FilterExpression object
-	 * @throws Exception
-	 */
-	public static FilterExpression buildCombinedFilterExpression(String completeFilter, boolean isNumericFilter) throws Exception {
-		FilterExpression.Builder fb = FilterExpression.newBuilder();
-		FilterExpressionList.Builder list = FilterExpressionList.newBuilder();
-		boolean or = false;
-		boolean and = false;
-		StringBuilder oneFilterTerm = new StringBuilder();
-		for (int i = 0, n = completeFilter.length(); i < n; i++) {
-			char c = completeFilter.charAt(i);
-			if (c == '(') {
-				// start of group
-				throw new Exception("Invalid filter: " + completeFilter + ". Groups are not allowed yet! Position: " + i);
-			} else if (c == ')') {
-				throw new Exception("Invalid filter: " + completeFilter + ". Groups are not allowed yet! Position: " + i);
-			} else if (c == ',') {
-				// OR found
-				if (i == 0) {
-					throw new Exception("Invalid filter: " + completeFilter + ". <,> cannot be the first char! Position: " + i);
-				}
-				if (and) {
-					throw new Exception("Invalid filter: " + completeFilter + ". OR(,) found with previous AND. Within one filter you can only combine all with OR (,) or all with AND(;).  Position: " + i);
-				}
-				if (oneFilterTerm.length() == 0) {
-					throw new Exception("Invalid filter: " + completeFilter + ". OR(,) found but no filter term as operand before. Position: " + i);
-				}
-				or = true;
-				String term = oneFilterTerm.toString();
-				oneFilterTerm.setLength(0);
-				if (isNumericFilter) {
-					if (log.isDebugEnabled()) {
-						log.debug("add numeric filter term: " + term);
-					}
-					list.addExpressions(buildNumericFilterExpression(term));
-				} else {
-					if (log.isDebugEnabled()) {
-						log.debug("add string filter term: " + term);
-					}
-					list.addExpressions(buildStringFilterExpression(term));
-				}
-			} else if (c == ';') {
-				// AND found
-				if (i == 0) {
-					throw new Exception("Invalid filter: " + completeFilter + ". <;> cannot be the first char! Position: " + i);
-				}
-				if (or) {
-					throw new Exception("Invalid filter: " + completeFilter + ". AND(;) found with previous OR. Within one filter you can only combine all with OR (,) or all with AND(;). Position: " + i);
-				}
-				if (oneFilterTerm.length() == 0) {
-					throw new Exception("Invalid filter: " + completeFilter + ". AND(;) found but no filter term as operand before. Position: " + i);
-				}
-				and = true;
-				String term = oneFilterTerm.toString();
-				oneFilterTerm.setLength(0);
-				if (isNumericFilter) {
-					if (log.isDebugEnabled()) {
-						log.debug("add numeric filter term: " + term);
-					}
-					list.addExpressions(buildNumericFilterExpression(term));
-				} else {
-					if (log.isDebugEnabled()) {
-						log.debug("add string filter term: " + term);
-					}
-					list.addExpressions(buildStringFilterExpression(term));
-				}
-			} else if (c == ' ') {
-				// skip this
-				continue;
-			} else if (i == n-1) {
-				// we are at the very last char
-				if (oneFilterTerm.length() == 0) {
-					throw new Exception("Invalid filter: " + completeFilter + ". Found end of filter but no filter term as operand before. Position: " + i);
-				}
-				if (and == false && or == false) {
-					String term = oneFilterTerm.toString();
-					oneFilterTerm.setLength(0);
-					if (isNumericFilter) {
-						if (log.isDebugEnabled()) {
-							log.debug("add numeric filter term: " + term);
-						}
-						list.addExpressions(buildNumericFilterExpression(term));
-					} else {
-						if (log.isDebugEnabled()) {
-							log.debug("add string filter term: " + term);
-						}
-						list.addExpressions(buildStringFilterExpression(term));
-					}
-				} else {
-					String term = oneFilterTerm.toString();
-					oneFilterTerm.setLength(0);
-					if (isNumericFilter) {
-						if (log.isDebugEnabled()) {
-							log.debug("add numeric filter term: " + term);
-						}
-						list.addExpressions(buildNumericFilterExpression(term));
-					} else {
-						if (log.isDebugEnabled()) {
-							log.debug("add string filter term: " + term);
-						}
-						list.addExpressions(buildStringFilterExpression(term));
-					}
-					if (and) {
-						if (log.isDebugEnabled()) {
-							log.debug("set AND filter list with count expressions: " + list.getExpressionsCount());
-						}
-						fb.setAndGroup(list);
-					} else if (or) {
-						if (log.isDebugEnabled()) {
-							log.debug("set OR filter list with count expressions: " + list.getExpressionsCount());
-						}
-						fb.setOrGroup(list);
-					}
-				}
-			} else {
-				// we must be in a filter term
-				oneFilterTerm.append(c);
-			}
-		}
-		return fb.build();
-	}
+	private static final String STRING_FILTER_OP_CONTAINS_NOT = "!@";		
 	
 	public static FilterExpression buildStringFilterExpression(String oneFilterTerm) throws Exception {
 		if (oneFilterTerm != null && oneFilterTerm.trim().isEmpty() == false) {
