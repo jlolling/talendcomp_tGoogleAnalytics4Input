@@ -77,13 +77,9 @@
    							"JOBLET".equals(node.getComponent().getComponentType().toString()) == false;
 %>
     // start creating client
-<%	if ("true".equals(keepClient)) { %>
 	de.jlo.talendcomp.google.analytics.ga4.v1.GoogleAnalyticsInput <%=cid%> = (de.jlo.talendcomp.google.analytics.ga4.v1.GoogleAnalyticsInput) de.jlo.talendcomp.google.analytics.ga4.GoogleAnalyticsBase.getFromCache(pid + "<%=cid%>" + jobName);
 	if (<%=cid%> == null) {
 		<%=cid%> = new de.jlo.talendcomp.google.analytics.ga4.v1.GoogleAnalyticsInput();
-<% } else { %>
-		de.jlo.talendcomp.google.analytics.ga4.v1.GoogleAnalyticsInput <%=cid%> = new de.jlo.talendcomp.google.analytics.ga4.v1.GoogleAnalyticsInput();
-<% } %>
 		<%=cid%>.setJsonCredentialFile(<%=keyFile%>);
 <% if (timeout != null && timeout.trim().isEmpty() == false) { %>
 		<%=cid%>.setTimeoutInSeconds(<%=timeout%>);
