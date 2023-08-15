@@ -28,7 +28,7 @@ public class FilterExpressionBuilder {
 	private static final String STRING_FILTER_OP_CONTAINS_NOT = "!@";
 		
 	/**
-	 * Setup filter expressions in th UA style
+	 * Setup filter expressions in the UA style
 	 * Examples:
 	 * dim1==value1,dim2==value2,dim3!=value3
 	 * dim1==value1;dim2==value2;dim3!=value3
