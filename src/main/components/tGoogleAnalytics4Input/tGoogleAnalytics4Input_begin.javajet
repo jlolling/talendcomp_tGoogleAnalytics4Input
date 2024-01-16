@@ -198,6 +198,7 @@
 	    }
 	    // next row from results
 		java.util.List<String> dataset_<%=cid%> = <%=cid%>.getNextPlainRecord();
+		globalMap.put("<%=cid%>_ROW_NUM", <%=cid%>.getOverAllCountRows());
 	   countLines_<%=cid%>++;
 <%  if (conn != null) { %>
 		// create a new row, thats avoid the need of setting attributes to null

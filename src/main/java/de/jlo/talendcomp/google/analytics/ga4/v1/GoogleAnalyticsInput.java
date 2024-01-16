@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Jan Lolling jan.lolling@gmail.com
+ * Copyright 2023 Jan Lolling jan.lolling@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.analytics.data.v1beta.DateRange;
 import com.google.analytics.data.v1beta.Dimension;
 import com.google.analytics.data.v1beta.FilterExpression;
@@ -44,11 +41,9 @@ import de.jlo.talendcomp.google.analytics.ga4.DimensionValue;
 import de.jlo.talendcomp.google.analytics.ga4.GoogleAnalyticsBase;
 import de.jlo.talendcomp.google.analytics.ga4.MetricValue;
 import de.jlo.talendcomp.google.analytics.ga4.Util;
-import io.grpc.StatusRuntimeException;
 
 public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 
-	private static Logger log = LogManager.getLogger(GoogleAnalyticsInput.class); 
 	private static final Map<String, GoogleAnalyticsInput> clientCache = new HashMap<String, GoogleAnalyticsInput>();
 	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	private String startDate = null;
