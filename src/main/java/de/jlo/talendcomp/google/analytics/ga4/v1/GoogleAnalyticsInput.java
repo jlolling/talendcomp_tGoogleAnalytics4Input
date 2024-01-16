@@ -291,6 +291,8 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 		}
 		lastFetchedRowCount = lastResultSet.size();
 		currentPlainRowIndex = 0;
+		maxCountNormalizedValues = 0;
+		currentNormalizedValueIndex = 0;
 	}
 	
 	/**
@@ -441,7 +443,7 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 		return oneRowDimensionValues;
 	}
 
-	private List<MetricValue> buildMetricValues(List<String> oneRow) {
+	private List<MetricValue> buildMetricValues(List<String> onePlainRow) {
 		int index = 0;
 		final List<MetricValue> oneRowMetricValues = new ArrayList<MetricValue>();
 		for (; index < listMetrics.size(); index++) {
@@ -453,7 +455,7 @@ public class GoogleAnalyticsInput extends GoogleAnalyticsBase {
 			}
 			mv.rowNum = currentOverallPlainRowCount;
 			int countDimensions = listDimensions.size();
-			String valueStr = oneRow.get(index + countDimensions);
+			String valueStr = onePlainRow.get(index + countDimensions);
 			try {
 				mv.value = Util.convertToDouble(valueStr, Locale.ENGLISH.toString());
 				oneRowMetricValues.add(mv);
