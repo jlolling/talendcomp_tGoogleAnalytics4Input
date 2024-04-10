@@ -11,3 +11,5 @@ Differences to the former component (tGoogleAnalyticsInput):
 * Segments works completely different and cannot currently addressed in the reports (perhaps because of the beta state) 
 
 Here the documentation: https://github.com/jlolling/talendcomp_tGoogleAnalytics4Input/blob/master/doc/tGoogleAnalytics4Input.pdf
+
+[Help page to download and install custom components](https://jan-lolling.de/) 
