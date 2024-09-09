@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Jan Lolling jan.lolling@gmail.com
+ * Copyright 2024 Jan Lolling jan.lolling@gmail.com
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class Util {
 	}
 	
 	public static Object convertToDatatype(String value, String dataType, String options) throws Exception {
-		if (value != null && value.trim().isEmpty() == false && value.contains("(not set)") == false) {
+		if (value != null && value.trim().isEmpty() == false) {
 			if ("String".equalsIgnoreCase(dataType)) {
 				return value;
 			} else if ("BigDecimal".equalsIgnoreCase(dataType)) {

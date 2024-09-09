@@ -153,7 +153,7 @@ public class GoogleAnalyticsBase {
 		if (analyticsDataClient != null) {
 			info("Close analytics client...");
 			try {
-				analyticsDataClient.shutdown();
+				analyticsDataClient.shutdownNow();
 				while (true) {
 					if (analyticsDataClient.awaitTermination(10000, TimeUnit.MILLISECONDS)) {
 						break;
